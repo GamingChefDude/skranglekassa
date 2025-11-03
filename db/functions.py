@@ -4,7 +4,7 @@ import mysql.connector, bcrypt
 import json
 
 try:
-	import ai_logic as ai
+	import AILogic as AI
 	print("Is ai yes")
 	noai = False
 except:
@@ -65,7 +65,7 @@ def chat():
 		# Validate user input
 		if not userInput:
 			return jsonify({"error": "No input provided"}), 400 
-		AIOutput = ai.get_ai_response(userInput, database) # Get AI response using the function from ai_logic.py
+		AIOutput = AI.get_ai_response(userInput, database) # Get AI response using the function from ai_logic.py
 		return jsonify({"aiOutput": AIOutput})# Return AI response as JSON
 	else:
 		return jsonify({"aiOutput": "Beklager! Ai fungerer foreløpig ikke grunnet serverfeil."}), 503 # Service Unavailable error
