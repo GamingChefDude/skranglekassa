@@ -1,5 +1,5 @@
-from functions import *
-from AIBackend import *
+from db.functions import *
+from AI.AIBackend import *
 
 print(app)
 print(app.template_folder)

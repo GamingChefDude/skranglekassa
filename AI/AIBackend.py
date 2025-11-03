@@ -1,12 +1,12 @@
 from flask import request, jsonify
 from flask_cors import CORS
-from functions import app
+from db.functions import app
 import json
 
 CORS(app)
 
 try:
-	import AILogic as AI
+	import AI.AILogic as AI
 	print("Is ai yes")
 	noai = False
 except:
