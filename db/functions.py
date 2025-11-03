@@ -1,16 +1,5 @@
 from flask import Flask, request, jsonify, render_template, url_for
-from flask_cors import CORS
 import mysql.connector, bcrypt
-import json
-
-try:
-	import AILogic as AI
-	print("Is ai yes")
-	noai = False
-except:
-	print("Ai not working")
-	noai = True
-
 
 app = Flask(
     __name__,
@@ -18,10 +7,8 @@ app = Flask(
     static_folder='../SRC/'
 )
 
-CORS(app)
-
 loggedIn = False
-
+from AIBackend import *
 
 def connect():
 	db = mysql.connector.connect(
@@ -47,29 +34,6 @@ def retrieve():
 	data = request.get_json(force=True)
 	print("Retrieved")
 	return data
-
-# Eskil code
-
-# Load product database from JSON file
-with open("db/database.json", "r") as f:
-	database = json.load(f) # Load product to database variable
-
-@app.route("/chat", methods=["POST"])
-def chat():
-
-	# check if ai is available
-	if not noai:
-		data = request.json
-		userInput = data.get("userInput", "") # Get user input from request
-
-		# Validate user input
-		if not userInput:
-			return jsonify({"error": "No input provided"}), 400 
-		AIOutput = AI.get_ai_response(userInput, database) # Get AI response using the function from ai_logic.py
-		return jsonify({"aiOutput": AIOutput})# Return AI response as JSON
-	else:
-		return jsonify({"aiOutput": "Beklager! Ai fungerer foreløpig ikke grunnet serverfeil."}), 503 # Service Unavailable error
-# End of Eskil code
 
 @app.route("/contact")
 def contactPage():
