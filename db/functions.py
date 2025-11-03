@@ -8,7 +8,6 @@ app = Flask(
 )
 
 loggedIn = False
-from AIBackend import *
 
 def connect():
 	db = mysql.connector.connect(
