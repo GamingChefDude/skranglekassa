@@ -17,13 +17,13 @@ client = ChatCompletionsClient(
 messages=[
     SystemMessage("You are a helpful assistant that is called Skrotnissen."),
     SystemMessage("You answer in a friendly, concise manner and as short as possible without lossing any detail or helpfullness."),
-    SystemMessage("You help users with their finding products in our store.")
+    SystemMessage("Use the product database to help the user find products they are looking for. If you don't find any products that match the user's request, politely inform them that no products were found."),
 ]
 
 def get_ai_response(userInput: str, database: dict) -> str:
     global messages
 
-    messages.append(SystemMessage(f"Here is the product database: {database}")) # Add the product database to the system message for context
+    messages.append(SystemMessage(f"Here is the product database you can use to help the user: {database}"))
     messages.append(UserMessage(userInput)) # Add user input to message history
 
     # Get AI response from the model

@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_cors import CORS
 from db.functions import app
-import json
+from db.productsDB import *
 
 CORS(app)
 
@@ -13,9 +13,7 @@ except:
 	print("Ai not working")
 	noai = True
 
-# Load product database from JSON file
-with open("db/database.json", "r") as f:
-	database = json.load(f) # Load product to database variable
+database = fetch_all_products()  # Fetch products from the database
 
 @app.route("/chat", methods=["POST"])
 def chat():
