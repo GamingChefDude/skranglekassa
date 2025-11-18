@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template, url_for
 import mysql.connector, bcrypt
+from db.dataBase import *
 
 app = Flask(
     __name__,
@@ -8,6 +9,28 @@ app = Flask(
 )
 
 loggedIn = False
+
+@app.route("/login", methods=["POST"])
+def login():
+	data = request.json
+	email = data.get("email", "")
+	password = data.get("password", "")
+	print(email, password)
+
+	checkEmail = get_user_by_email(email)
+	if checkEmail == None:
+		print("No user found with that email.")
+		return jsonify({"message": "Login failed"}), 401
+	else: print("User found:", checkEmail)
+
+	getPassword = checkEmail[5]  # Assuming password is the 5th column
+	print("Retrieved password from DB:", getPassword)
+
+	if password == getPassword:
+		print("logged in!")
+		return jsonify({"message": "Login successful"}), 200
+
+
 
 def connect():
 	db = mysql.connector.connect(
@@ -159,55 +182,6 @@ def signup():
 	finally:
 		c.close()
 		db.close()
-
-
-@app.route("/login", methods=["POST"])
-def login():
-	global loggedIn
-	print("login")
-	try:
-		data = retrieve()
-	except Exception as err:
-		print("Retrieve error:", err)
-		return jsonify({"message": "could not receive data"}), 449 # Retry With (bad user input)
-	
-	email = str(data.get("email"))
-	password = data.get("password")
-
-	print(email, password)
-
-	try:
-		_, c = connect()
-
-	except mysql.connector.Error as err:
-		print("Database error:", err)
-		return jsonify({"message": "Database connection error"})
-	except Exception as err:
-		print("Other error:", err)
-		return jsonify({"message": "Unexpected database error"}), 500 # Internal Server Error
-	
-	try:
-		query = "SELECT passord FROM brukere WHERE epost = %s;"
-		c.execute(query, (email,))
-		row = c.fetchone()
-
-		if bcrypt.checkpw(password.encode("utf-8"), row[0]):
-			loggedIn = True
-			print("logged in!")
-			return jsonify({"message": "Login successful"}), 200
-		else:
-			loggedIn = False
-			print("Not logged in..")
-			return jsonify({"message": "Login failed"}), 401
-		
-	except TypeError as err:
-		print(err)
-		return jsonify({"message": "Database error"}), 422
-	
-	except Exception as err:
-		print(err)
-		return jsonify({"message": "Database error"}), 500
-
 
 @app.route("/")
 def home():
