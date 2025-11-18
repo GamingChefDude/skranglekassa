@@ -1,6 +1,8 @@
 from db.functions import *
 from AI.AIBackend import *
-from dataBase import *
+from db.dataBase import *
+
+print(get_user_by_email("eskil@epost"))
 
 print(app)
 print(app.template_folder)

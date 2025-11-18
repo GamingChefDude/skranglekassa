@@ -21,3 +21,12 @@ def fetch_all_products():
     cur.close()
     conn.close()
     return products
+
+def get_user_by_email(email):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
+    return user
