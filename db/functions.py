@@ -2,19 +2,27 @@ from flask import Flask, request, jsonify, render_template, url_for
 import mysql.connector, bcrypt
 from db.dataBase import *
 
+
 app = Flask(
     __name__,
     template_folder='../SRC/HTML/',
     static_folder='../SRC/'
 )
 
+
 loggedIn = False
+
+
+@app.route("/signup", methods=["POST"])
+def signup():
+	# add func in dataBase.py
+	pass
+
 
 @app.route("/login", methods=["POST"])
 def login():
-	data = request.json
-	email = data.get("email", "")
-	password = data.get("password", "")
+	email = request.json.get("email", "")
+	password = request.json.get("password", "")
 
 	# get email and password from database
 	checkEmail = get_user_by_email(email)
@@ -137,7 +145,7 @@ def logoutPage():
 	return render_template("logout.html")
 
 
-@app.route("/signup", methods=["POST"])
+""" @app.route("/signup", methods=["POST"])
 def signup():
 	global loggedIn
 	print("signup")
@@ -181,7 +189,7 @@ def signup():
 	
 	finally:
 		c.close()
-		db.close()
+		db.close() """
 
 @app.route("/")
 def home():
