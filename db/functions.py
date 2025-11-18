@@ -15,15 +15,21 @@ loggedIn = False
 
 @app.route("/signup", methods=["POST"])
 def signup():
-	# add func in dataBase.py
+	#get user info from request
 	firstName = request.json.get("fname", "")
 	lastName = request.json.get("lname", "")
 	email = request.json.get("email", "")
 	birthdate = request.json.get("birthdate", "")
 	password = request.json.get("password", "")
-	print(birthdate)
-	add_user(firstName, lastName, email, birthdate, password)
-	return jsonify({"message": "User created successfully"}), 201 # Created
+
+	#check if email already exists
+	checkEmail = get_user_by_email(email)
+	if checkEmail != None:
+		print("Email already in use.")
+		return jsonify({"message": "Email already in use, Try again"}), 409 
+	else:
+		add_user(firstName, lastName, email, birthdate, password)
+		return jsonify({"message": "User created successfully"}), 200
 
 
 @app.route("/login", methods=["POST"])
