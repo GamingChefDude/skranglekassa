@@ -8,10 +8,10 @@ CORS(app)
 try:
 	import AI.AILogic as AI
 	print("Is ai yes")
-	noai = False
+	ai = True
 except:
 	print("Ai not working")
-	noai = True
+	ai = False
 
 database = fetch_all_products()  # Fetch products from the database
 
@@ -19,7 +19,7 @@ database = fetch_all_products()  # Fetch products from the database
 def chat():
 
 	# check if ai is available
-	if not noai:
+	if ai:
 		data = request.json
 		userInput = data.get("userInput", "") # Get user input from request
 

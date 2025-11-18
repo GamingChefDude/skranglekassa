@@ -16,7 +16,14 @@ loggedIn = False
 @app.route("/signup", methods=["POST"])
 def signup():
 	# add func in dataBase.py
-	pass
+	firstName = request.json.get("fname", "")
+	lastName = request.json.get("lname", "")
+	email = request.json.get("email", "")
+	birthdate = request.json.get("birthdate", "")
+	password = request.json.get("password", "")
+	print(birthdate)
+	add_user(firstName, lastName, email, birthdate, password)
+	return jsonify({"message": "User created successfully"}), 201 # Created
 
 
 @app.route("/login", methods=["POST"])
@@ -26,17 +33,18 @@ def login():
 
 	# get email and password from database
 	checkEmail = get_user_by_email(email)
-	getPassword = checkEmail[5]
 
 	# check if email exists
 	if checkEmail == None:
 		print("No user found with that email.")
 		return jsonify({"message": "Login failed"}), 401
+	else:
+		getPassword = checkEmail[5]
 
-	# check password matches with emails password
-	if password == getPassword:
-		print("logged in!")
-		return jsonify({"message": "Login successful"}), 200
+		# check password matches with emails password
+		if password == getPassword:
+			print("logged in!")
+			return jsonify({"message": "Login successful"}), 200
 
 
 
@@ -143,53 +151,6 @@ def logoutPage():
 	loggedIn = False
 
 	return render_template("logout.html")
-
-
-""" @app.route("/signup", methods=["POST"])
-def signup():
-	global loggedIn
-	print("signup")
-	try:
-		data = retrieve()
-		print("retrieved")
-	except Exception as err:
-		print("Retrieve error:", err)
-		return jsonify({"message": "could not recieve data"}), 449 # Retry With (bad user input)
-
-	firstname = data.get("fname")
-	lastname = data.get("lname")
-	bdate = data.get("birthdate")
-	email = data.get("email")
-	bdate = data.get("birthdate")
-	hashed = encrypt(data.get("cpassword"))
-
-	try:
-		db, c = connect()
-		print("connected")
-
-		c.execute("INSERT INTO brukere (fornavn, etternavn, epost, passord, fodselsdato) VALUES (%s, %s, %s, %s, %s)", (firstname, lastname, email, hashed, bdate))
-		print("Executed insertion")
-
-		db.commit()
-		print("Committed")
-
-		return jsonify({"message": "User created successfully"}), 201 # Created
-	
-	except mysql.IntegrityError as err:
-		print("Database error:", err)
-		return jsonify({"message": "User with some similar credentials already exists"}), 409
-	
-	except mysql.connector.Error as err:
-		print("Database error:", err)
-		return jsonify({"message": "Database error"}), 400 
-	
-	except Exception as err:
-		print("Other error:", err)
-		return jsonify({"message": "Unexpected error"}), 500 # Internal Server Error
-	
-	finally:
-		c.close()
-		db.close() """
 
 @app.route("/")
 def home():

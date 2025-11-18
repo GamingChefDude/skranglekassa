@@ -30,3 +30,14 @@ def get_user_by_email(email):
     cur.close()
     conn.close()
     return user
+
+def add_user(first_name, last_name, email, birthdate, password):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO users (first_name, last_name, email, date_of_birth, password) VALUES (%s, %s, %s, %s, %s);",
+        (first_name, last_name, email, birthdate, password)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
