@@ -15,24 +15,24 @@ def login():
 	data = request.json
 	email = data.get("email", "")
 	password = data.get("password", "")
-	print(email, password)
 
+	# get email and password from database
 	checkEmail = get_user_by_email(email)
+	getPassword = checkEmail[5]
+
+	# check if email exists
 	if checkEmail == None:
 		print("No user found with that email.")
 		return jsonify({"message": "Login failed"}), 401
-	else: print("User found:", checkEmail)
 
-	getPassword = checkEmail[5]  # Assuming password is the 5th column
-	print("Retrieved password from DB:", getPassword)
-
+	# check password matches with emails password
 	if password == getPassword:
 		print("logged in!")
 		return jsonify({"message": "Login successful"}), 200
 
 
 
-def connect():
+def connect(): # remove later when only using postgresql
 	db = mysql.connector.connect(
 	host = "127.0.0.1",		#
 	user = "root",			# Change credentials
