@@ -45,7 +45,7 @@ def login():
 		print("No user found with that email.")
 		return jsonify({"message": "Login failed"}), 401
 	else:
-		getPassword = checkEmail[5]
+		getPassword = checkEmail[4]
 
 		# check password matches with emails password
 		if password != getPassword:
