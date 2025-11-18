@@ -1,6 +1,6 @@
 from db.functions import *
 from AI.AIBackend import *
-from db.productsDB import *
+from dataBase import *
 
 print(app)
 print(app.template_folder)

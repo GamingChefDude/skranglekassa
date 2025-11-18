@@ -13,11 +13,16 @@ client = ChatCompletionsClient(
     api_version="2024-12-01-preview",
 )
 
+# system instructions for the AI
+AIInitMessage = [
+    "You are a helpful assistant that is called Skrotnissen. ",
+    "You answer in a friendly, concise manner and as short as possible without lossing any detail or helpfullness. ",
+    "Use the product database to help the user find products they are looking for. If you don't find any products that match the user's request, politely inform them that no products were found."
+]
+
 # Initialize message history with system instructions
 messages=[
-    SystemMessage("You are a helpful assistant that is called Skrotnissen."),
-    SystemMessage("You answer in a friendly, concise manner and as short as possible without lossing any detail or helpfullness."),
-    SystemMessage("Use the product database to help the user find products they are looking for. If you don't find any products that match the user's request, politely inform them that no products were found."),
+    SystemMessage(AIInitMessage)
 ]
 
 def get_ai_response(userInput: str, database: dict) -> str:

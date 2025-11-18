@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_cors import CORS
 from db.functions import app
-from db.productsDB import *
+from dataBase import *
 
 CORS(app)
 
