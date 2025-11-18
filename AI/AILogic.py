@@ -22,7 +22,7 @@ AIInitMessage = [
 
 # Initialize message history with system instructions
 messages=[
-    SystemMessage(AIInitMessage)
+    SystemMessage("\n".join(AIInitMessage))
 ]
 
 def get_ai_response(userInput: str, database: dict) -> str:
