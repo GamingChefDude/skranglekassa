@@ -42,10 +42,12 @@ def login():
 		getPassword = checkEmail[5]
 
 		# check password matches with emails password
-		if password == getPassword:
+		if password != getPassword:
+			print("Incorrect password.")
+			return jsonify({"message": "Login failed"}), 401
+		else:
 			print("logged in!")
 			return jsonify({"message": "Login successful"}), 200
-
 
 
 def connect(): # remove later when only using postgresql
