@@ -37,7 +37,7 @@ def login():
 	email = request.json.get("email", "")
 	password = request.json.get("password", "")
 
-	# get email and password from database
+	# check email in database
 	checkEmail = get_user_by_email(email)
 
 	# check if email exists
