@@ -110,13 +110,6 @@ def allProductsPage():
 	global loggedIn
 	print("All products")
 
-	_, c = connect()
-
-	c.execute("""
-		SELECT * FROM oppforinger
-		ORDER BY sist_endret;
-	""")
-
 	return render_template("allproducts.html")
 
 
