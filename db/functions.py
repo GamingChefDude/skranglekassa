@@ -23,13 +23,14 @@ def signup():
 	password = request.json.get("password", "")
 
 	#check if email already exists
-	checkEmail = get_user_by_email(email)
-	if checkEmail != None:
-		print("Email already in use.")
+	if get_user_by_email(email) is not None:
 		return jsonify({"message": "Email already in use, Try again"}), 409 
-	else:
-		add_user(firstName, lastName, email, birthdate, password)
-		return jsonify({"message": "User created successfully"}), 200
+	
+	hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
+	add_user(firstName, lastName, email, birthdate, hashedPassword)
+	
+	return jsonify({"message": "User created successfully"}), 200
 
 
 @app.route("/login", methods=["POST"])
@@ -38,22 +39,25 @@ def login():
 	password = request.json.get("password", "")
 
 	# check email in database
-	checkEmail = get_user_by_email(email)
+	user = get_user_by_email(email)
 
 	# check if email exists
-	if checkEmail == None:
-		print("No user found with that email.")
+	if user is None:
 		return jsonify({"message": "Login failed"}), 401
-	else:
-		getPassword = checkEmail[4]
 
-		# check password matches with emails password
-		if password != getPassword:
-			print("Incorrect password.")
-			return jsonify({"message": "Login failed"}), 401
-		else:
-			print("logged in!")
-			return jsonify({"message": "Login successful"}), 200
+	storedhash = user[4]
+	
+	# handle DB returning memoryview or str
+	if isinstance(storedhash, memoryview):
+		storedhash = storedhash.tobytes()
+
+	if isinstance(storedhash, str):
+		storedhash = storedhash.encode("utf-8")
+
+	if not bcrypt.checkpw(password.encode("utf-8"), storedhash):
+		return jsonify({"message": "Login failed"}), 401
+
+	return jsonify({"message": "Login successful"}), 200
 
 
 def connect(): # remove later when only using postgresql
