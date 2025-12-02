@@ -22,6 +22,8 @@ def fetch_all_products():
     conn.close()
     return products
 
+# add product to database
+
 def get_user_by_email(email):
     conn = get_db_connection()
     cur = conn.cursor()
