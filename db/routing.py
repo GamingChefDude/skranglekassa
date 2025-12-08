@@ -54,7 +54,7 @@ def productImage():
 @app.route("/user")
 def userPage():
 	print("user page")
-	if loggedIn == True:
+	if core.loggedIn == True:
 		return render_template("user.html")
 	else: 
 		return jsonify({"message": "Login to view page"}), 401
