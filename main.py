@@ -1,7 +1,6 @@
-from db.routing import *
-from db.functions import *
-from AI.AIBackend import *
-from db.dataBase import *
+import db.routing
+import db.functions
+from db.appCore import app
 
 if __name__ == "__main__":
     app.run(debug=True)

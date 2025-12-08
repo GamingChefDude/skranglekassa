@@ -1,9 +1,10 @@
 from flask import jsonify, render_template, url_for
-from db.functions import app, loggedIn
+import db.appCore as core
+from db.appCore import app
+
 
 @app.route("/contact")
 def contactPage():
-	global loggedIn
 	print("Contact page")
 
 	return render_template("contact.html")
@@ -11,7 +12,6 @@ def contactPage():
 
 @app.route("/login")
 def loginPage():
-	global loggedIn
 	print("Login page")
 
 	return render_template("login.html")
@@ -19,7 +19,6 @@ def loginPage():
 
 @app.route("/signup")
 def signupPage():
-	global loggedIn
 	print("Signup page")
 
 	return render_template("signup.html")
@@ -27,7 +26,6 @@ def signupPage():
 
 @app.route("/allproducts")
 def allProductsPage():
-	global loggedIn
 	print("All products")
 
 	return render_template("allproducts.html")
@@ -35,7 +33,6 @@ def allProductsPage():
 
 @app.route("/newproduct")
 def newProductPage():
-	global loggedIn
 	print("New product page")
 
 	return render_template("newproduct.html")
@@ -43,7 +40,6 @@ def newProductPage():
 
 @app.route("/product")
 def productPage():
-	global loggedIn
 	print("Product page")
 
 	return render_template("product.html")
@@ -51,14 +47,12 @@ def productPage():
 
 @app.route("/productimage")
 def productImage():
-	global loggedIn
 	print("Image page")
 
 	return render_template("productimage.html")
 
 @app.route("/user")
 def userPage():
-	global loggedIn
 	print("user page")
 	if loggedIn == True:
 		return render_template("user.html")
@@ -68,15 +62,14 @@ def userPage():
 
 @app.route("/logout")
 def logoutPage():
-	global loggedIn
-	loggedIn = False
+	core.loggedIn = False
 
 	return render_template("logout.html")
 
 @app.route("/")
 def home():
-	global loggedIn
-	if loggedIn == False:
+	print(f"User logged in: {core.loggedIn}, routing.py")
+	if core.loggedIn == False:
 		return render_template(
 			"index.html", 
 			contactPage_url=url_for("contactPage"),
@@ -90,7 +83,7 @@ def home():
 			logoutPage_url=url_for("logoutPage")
 			)
 	
-	elif loggedIn == True:
+	elif core.loggedIn == True:
 		return render_template("home.html")
 	else:
 		return jsonify({"message": "How are you here?"}), 418 # I'm a teapot

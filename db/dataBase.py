@@ -23,6 +23,8 @@ def fetch_all_products():
     return products
 
 # add product to database
+def add_product():
+    pass
 
 def get_user_by_email(email):
     conn = get_db_connection()
