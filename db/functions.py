@@ -51,3 +51,14 @@ def login():
     core.loggedIn = True
     print(f"User logged in: {core.loggedIn}, functions.py")
     return jsonify({"message": "Login successful"}), 200
+
+@app.route("/newproduct", methods=["POST"])
+def newproduct():
+	name = request.json.get("name", "")
+	price = request.json.get("price", "")
+	description = request.json.get("description", "")
+	specs = request.json.get("specs", "")
+
+	dataBase.add_product(name, price, description, specs)
+	print("Adding new product")
+	return jsonify({"message": "Product added successfully"}), 200

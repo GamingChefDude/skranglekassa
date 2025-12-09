@@ -22,7 +22,7 @@
 <body>
     <h1>Nytt Produkt:</h1>
     <div class="inputpage">
-        <form action="newproduct.php">
+        <form id="newProductForm">
             <label for="image">Bilde</label>
             <br>
             <input type="file" id="image" name="image">
@@ -51,6 +51,33 @@
             <h4 id="required">* Påkrevd</h4>
             <input type="submit" value="Send Inn">
         </form>
+        <script>
+            document.getElementById("newProductForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            try {
+                let res = await fetch("http://127.0.0.1:5000/newproduct", {
+                    method: "POST", // post gives 405 error GET gives nothing at all
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        picture: document.getElementById("image").value,
+                        name: document.getElementById("name").value,
+                        price: document.getElementById("price").value,
+                        description: document.getElementById("description").value,
+                        specs: document.getElementById("specifications").value,
+                    })
+                    
+                });
+
+                console.log("Product submitted");
+                let data = await res.json();
+
+            } catch (err) {
+                alert("Noe gikk galt.");
+                console.log(err);
+            }
+        });
+        </script>
     </div>
     <br>
 </body>

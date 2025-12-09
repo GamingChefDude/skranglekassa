@@ -23,8 +23,16 @@ def fetch_all_products():
     return products
 
 # add product to database
-def add_product():
-    pass
+def add_product(name, price, description, specs):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO products (name, price, description, specs) VALUES (%s, %s, %s, %s);",
+        (name, price, description, specs)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
 
 def get_user_by_email(email):
     conn = get_db_connection()
