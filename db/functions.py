@@ -52,6 +52,7 @@ def login():
     print(f"User logged in: {core.loggedIn}, functions.py")
     return jsonify({"message": "Login successful"}), 200
 
+
 @app.route("/newproduct", methods=["POST"])
 def newproduct():
 	name = request.json.get("name", "")

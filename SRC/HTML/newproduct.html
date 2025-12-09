@@ -57,7 +57,7 @@
 
             try {
                 let res = await fetch("http://127.0.0.1:5000/newproduct", {
-                    method: "POST", // post gives 405 error GET gives nothing at all
+                    method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         picture: document.getElementById("image").value,
