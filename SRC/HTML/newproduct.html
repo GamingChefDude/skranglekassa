@@ -65,12 +65,20 @@
                         price: document.getElementById("price").value,
                         description: document.getElementById("description").value,
                         specs: document.getElementById("specifications").value,
-                    })
-                    
+                    }) 
                 });
-
-                console.log("Product submitted");
+                
                 let data = await res.json();
+
+                if (res.status === 200) {
+                    alert(data.message);
+                    window.location.replace(href="{{ url_for('home')}}");
+                    document.getElementById("newProductForm").reset();
+                } else if (res.status === 401) {
+                    alert(data.message);
+                }
+
+                
 
             } catch (err) {
                 alert("Noe gikk galt.");

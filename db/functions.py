@@ -5,7 +5,6 @@ import db.appCore as core
 from db.appCore import app
 
 
-
 @app.route("/signup", methods=["POST"])
 def signup():
 	#get user info from request
@@ -17,13 +16,13 @@ def signup():
 
 	#check if email already exists
 	if dataBase.get_user_by_email(email) is not None:
-		return jsonify({"message": "Email already in use, Try again"}), 409 
+		return jsonify({"message": "Email er i bruk. Prøv igjen"}), 409 
 	
 	hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
 	dataBase.add_user(firstName, lastName, email, birthdate, hashedPassword)
 	
-	return jsonify({"message": "User created successfully"}), 200
+	return jsonify({"message": "Bruker lagt til"}), 200
 
 
 @app.route("/login", methods=["POST"])
@@ -35,7 +34,7 @@ def login():
     user = dataBase.get_user_by_email(email)
 	# check if email exists
     if user is None:
-        return jsonify({"message": "Login failed"}), 401
+        return jsonify({"message": "Bruker navn eller passord er feil. Prøv igjen"}), 401
 
     storedhash = user[4]
 
@@ -46,11 +45,11 @@ def login():
         storedhash = storedhash.encode("utf-8")
 
     if not bcrypt.checkpw(password.encode("utf-8"), storedhash):
-        return jsonify({"message": "Login failed"}), 401
+        return jsonify({"message": "Bruker navn eller passord er feil. Prøv igjen"}), 401
 
     core.loggedIn = True
     print(f"User logged in: {core.loggedIn}, functions.py")
-    return jsonify({"message": "Login successful"}), 200
+    return jsonify({"message": "Velkommen"}), 200
 
 
 @app.route("/newproduct", methods=["POST"])
@@ -60,6 +59,9 @@ def newproduct():
 	description = request.json.get("description", "")
 	specs = request.json.get("specs", "")
 
+	if core.loggedIn == False: # make sure only logged in users can add products
+		return jsonify({"message": "Logg in for å legge til product"}), 401
+      
 	dataBase.add_product(name, price, description, specs)
 	print("Adding new product")
-	return jsonify({"message": "Product added successfully"}), 200
+	return jsonify({"message": "Product lagt til"}), 200
