@@ -22,7 +22,6 @@ def fetch_all_products():
     conn.close()
     return products
 
-# add product to database
 def add_product(name, price, description, specs):
     conn = get_db_connection()
     cur = conn.cursor()
